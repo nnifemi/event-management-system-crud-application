@@ -1,0 +1,38 @@
+﻿@model Event_Management_System_CRUD_Application.Models.Event
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <h2>Event Details</h2>
+
+    <dl class="dl-horizontal">
+        <dt>Event ID</dt>
+        <dd>@Model.EventID</dd>
+
+        <dt>Event Name</dt>
+        <dd>@Model.EventName</dd>
+
+        <dt>Event Date</dt>
+        <dd>@Model.EventDate.ToShortDateString()</dd>
+
+        <dt>Location</dt>
+        <dd>@Model.Location</dd>
+
+        <dt>Description</dt>
+        <dd>@Model.Description</dd>
+    </dl>
+    @*view displays detailed information about an event and includes a link to go back to the event list.*@
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿@model Event_Management_System_CRUD_Application.Models.Event
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+    <h2>Create Event</h2>
+
+    @using (Html.BeginForm("Create", "Event", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div>
+            <label for="EventName">Event Name:</label>
+            <input type="text" id="EventName" name="EventName" />
+        </div>
+
+        <div>
+            <label for="EventDate">Event Date:</label>
+            <input type="date" id="EventDate" name="EventDate" />
+        </div>
+
+        <div>
+            <label for="Location">Location:</label>
+            <input type="text" id="Location" name="Location" />
+        </div>
+
+        <div>
+            <label for="Description">Description:</label>
+            <textarea id="Description" name="Description"></textarea>
+        </div>
+
+        <div>
+            <input type="submit" value="Create" />
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</body>
+</html>
