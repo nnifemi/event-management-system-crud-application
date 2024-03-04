@@ -1,188 +1,92 @@
 ﻿using Event_Management_System_CRUD_Application.Models;
-using Microsoft.AspNetCore.Mvc;
+using EMS_BLL;
+using EMS_ENTITIES;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace Event_Management_System_CRUD_Application.Controllers
 {
     public class EventController : Controller
     {
-        // GET: Event
-        private static List<Event> _events = new List<Event>
+        public ActionResult Index()
         {
-            new Event { EventID = 1, EventName = "Event 1", EventDate = DateTime.Now, Location = "Location 1", Description = "Description 1" },
-            new Event { EventID = 2, EventName = "Event 2", EventDate = DateTime.Now.AddDays(1), Location = "Location 2", Description = "Description 2" },
-        };
-
-        private static readonly List<Registration> _registrations = new List<Registration>();
-
-        public IActionResult Index()
-        {
-            try
-            {
-                return View(_events);
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = $"Error: {ex.Message}";
-                return View(new List<Event>());
-            }
+            EventService eventService = new EventService();
+            var events = eventService.GetAllEvents();
+            return View(events);
         }
 
-        public IActionResult Create()
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
+        public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Event newEvent)
+        public ActionResult Create(Event e)
         {
             try
             {
-                if (ModelState.IsValid)
+                EventService eventService = new EventService();
+                if (eventService.AddEventService(e))
                 {
-                    newEvent.EventID = _events.Count + 1;
-                    _events.Add(newEvent);
-                    return RedirectToAction("Index");
+                    ViewBag.Message = "Event added successfully";
+                    return View();
                 }
-
-                return View(newEvent);
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = $"Error: {ex.Message}";
-                return View(newEvent);
-            }
-        }
-
-        public IActionResult Edit(int id)
-        {
-            try
-            {
-                var existingEvent = _events.FirstOrDefault(e => e.EventID == id);
-
-                if (existingEvent == null)
+                else
                 {
-                    return NotFound();
+                    return View();
                 }
-
-                return View(existingEvent);
             }
-            catch (Exception ex)
+            catch
             {
-                ViewBag.ErrorMessage = $"Error: {ex.Message}";
-                return RedirectToAction("Index");
-            }
-        }
-
-        [HttpPost]
-        public IActionResult Edit(Event updatedEvent)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var existingEvent = _events.FirstOrDefault(e => e.EventID == updatedEvent.EventID);
-
-                    if (existingEvent != null)
-                    {
-                        existingEvent.EventName = updatedEvent.EventName;
-                        existingEvent.EventDate = updatedEvent.EventDate;
-                        existingEvent.Location = updatedEvent.Location;
-                        existingEvent.Description = updatedEvent.Description;
-                    }
-
-                    return RedirectToAction("Index");
-                }
-
-                return View(updatedEvent);
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = $"Error: {ex.Message}";
-                return View(updatedEvent);
-            }
-        }
-
-        public IActionResult Delete(int id)
-        {
-            try
-            {
-                var existingEvent = _events.FirstOrDefault(e => e.EventID == id);
-
-                if (existingEvent == null)
-                {
-                    return NotFound();
-                }
-
-                return View(existingEvent);
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = $"Error: {ex.Message}";
-                return RedirectToAction("Index");
-            }
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
-        {
-            try
-            {
-                var existingEvent = _events.FirstOrDefault(e => e.EventID == id);
-
-                if (existingEvent != null)
-                {
-                    _events.Remove(existingEvent);
-                }
-
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = $"Error: {ex.Message}";
-                return RedirectToAction("Index");
-            }
-        }
-
-        public IActionResult RegisterAttendee(int eventId)
-        {
-            try
-            {
-                var existingEvent = _events.FirstOrDefault(e => e.EventID == eventId);
-
-                if (existingEvent == null)
-                {
-                    return NotFound();
-                }
-
-                ViewBag.EventId = eventId;
                 return View();
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = $"Error: {ex.Message}";
-                return RedirectToAction("Index");
-            }
+        }
+
+        public ActionResult Edit(int id)
+        {
+            EventService eventService = new EventService();
+            var specificEvent = eventService.GetAllEvents().Find(e => e.EventId == id);
+            return View(specificEvent);
         }
 
         [HttpPost]
-        public IActionResult RegisterAttendee(Registration registration)
+        public ActionResult Edit(Event e)
         {
             try
             {
-                if (ModelState.IsValid)
+                EventService eventService = new EventService();
+                if (eventService.UpdateEventService(e))
                 {
-                    _registrations.Add(registration);
-                    return RedirectToAction("Index");
+                    ViewBag.Message = "Event updated successfully";
+                    return View();
                 }
-
-                return View(registration);
+                else
+                {
+                    return View();
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                ViewBag.ErrorMessage = $"Error: {ex.Message}";
+                return View();
+            }
+        }
+
+        public ActionResult Delete(int eventId)
+        {
+            EventService eventService = new EventService();
+            if (eventService.DeleteEventService(eventId))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
                 return RedirectToAction("Index");
             }
         }
