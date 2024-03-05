@@ -1,4 +1,4 @@
-﻿using Event_Management_System_CRUD_Application.Models;
+﻿using Event_Management_System_CRUD_Application.Controllers;
 using EMS_BLL;
 using EMS_ENTITIES;
 using System;
@@ -12,7 +12,7 @@ namespace Event_Management_System_CRUD_Application.Controllers
     {
         public ActionResult Index()
         {
-            EventService eventService = new EventService();
+            Event_Service eventService = new Event_Service();
             var events = eventService.GetAllEvents();
             return View(events);
         }
@@ -32,7 +32,7 @@ namespace Event_Management_System_CRUD_Application.Controllers
         {
             try
             {
-                EventService eventService = new EventService();
+                Event_Service eventService = new Event_Service();
                 if (eventService.AddEventService(e))
                 {
                     ViewBag.Message = "Event added successfully";
@@ -51,8 +51,8 @@ namespace Event_Management_System_CRUD_Application.Controllers
 
         public ActionResult Edit(int id)
         {
-            EventService eventService = new EventService();
-            var specificEvent = eventService.GetAllEvents().Find(e => e.EventId == id);
+            Event_Service eventService = new Event_Service();
+            var specificEvent = eventService.GetAllEvents().Find(e => e.EventID == id);
             return View(specificEvent);
         }
 
@@ -61,7 +61,7 @@ namespace Event_Management_System_CRUD_Application.Controllers
         {
             try
             {
-                EventService eventService = new EventService();
+                Event_Service eventService = new Event_Service();
                 if (eventService.UpdateEventService(e))
                 {
                     ViewBag.Message = "Event updated successfully";
@@ -80,7 +80,7 @@ namespace Event_Management_System_CRUD_Application.Controllers
 
         public ActionResult Delete(int eventId)
         {
-            EventService eventService = new EventService();
+            Event_Service eventService = new Event_Service();
             if (eventService.DeleteEventService(eventId))
             {
                 return RedirectToAction("Index");

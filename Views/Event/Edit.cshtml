@@ -1,49 +1,73 @@
-﻿@model Event_Management_System_CRUD_Application.Models.Event
+﻿@model EMS_ENTITIES.Event
 
 @{
-    Layout = null;
+    ViewBag.Title = "EditEvent";
 }
 
-<!DOCTYPE html>
+<h2>EditEvent</h2>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
-    <h2>Edit Event</h2>
 
-    @using (Html.BeginForm("Edit", "Event", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-        <input type="hidden" name="EventID" value="@Model.EventID" />
+<div class="form-horizontal">
+    <h4>Event</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.EventID)
 
-        <div>
-            <label for="EventName">Event Name:</label>
-            <input type="text" id="EventName" name="EventName" value="@Model.EventName" />
+    <div class="form-group">
+        @Html.LabelFor(model => model.EventName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div>
-            <label for="EventDate">Event Date:</label>
-            <input type="date" id="EventDate" name="EventDate" value="@Model.EventDate.ToString("yyyy-MM-dd")" />
+    <div class="form-group">
+        @Html.LabelFor(model => model.EventDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.EventDate, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EventDate, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div>
-            <label for="Location">Location:</label>
-            <input type="text" id="Location" name="Location" value="@Model.Location" />
+    <div class="form-group">
+        @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div>
-            <label for="Description">Description:</label>
-            <textarea id="Description" name="Description">@Model.Description</textarea>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div>
-            <input type="submit" value="Save Changes" />
-            @Html.ActionLink("Back to List", "Index")
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-primary" />
         </div>
-    }
-</body>
-</html>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10" style="color:green">
+            @ViewBag.Message
+        </div>
+    </div>
+
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
